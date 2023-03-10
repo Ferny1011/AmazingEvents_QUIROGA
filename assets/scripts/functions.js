@@ -1,5 +1,5 @@
 //this function will push all the events to an array.
-export const downloadEvents = (events,array) => {
+export const downloadEvents = (events, array) => {
     events.forEach(event => {
         array.push(event);
     });
@@ -22,6 +22,26 @@ export const createCards = (events, container) => {
             </div>
         </div>`;
         fragment.appendChild(card);
+    });
+    container.appendChild(fragment);
+}
+
+//this function will get the categories from the events.
+export const getCategories = (events) => {
+    let categories = (events.map(event => event.category)).filter((category, index, array) => array.indexOf(category) === index);
+    return categories;
+}
+
+//this function will create a list of categories in the template.
+export const generateCategories = (categories, container) => {
+    let fragment = document.createDocumentFragment();
+    categories.forEach((category,index) => {
+        let option = document.createElement("div");
+        option.classList.add("form-check", "form-check-inline");
+        option.innerHTML = `
+        <input class="form-check-input" type="checkbox" id="${index}" value="${category}">
+        <label class="form-check-label" for="${index}">${category}</label>`;
+        fragment.appendChild(option);
     });
     container.appendChild(fragment);
 }
