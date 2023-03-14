@@ -1,5 +1,5 @@
 import data from "./amazing.js";
-import { createCards, getCategories, generateCategories} from "./functions.js";
+import { createCards, getCategories, generateCategories } from "./functions.js";
 
 
 let pastEvents = data.events.filter(event => event.date < data.currentDate);

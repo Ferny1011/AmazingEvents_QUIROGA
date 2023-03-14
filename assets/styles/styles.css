@@ -491,6 +491,7 @@ td {
 .description-details {
     display: flex;
     justify-content: center;
+    text-align: center;
     align-items: center;
     flex-flow: column;
     width: 100%;
@@ -502,11 +503,21 @@ td {
 
 }
 
-.description-details>h3 {
+.description-details>h3,
+.description-details span {
     font-size: 1.2rem;
     font-weight: 600;
     font-family: 'Courgette', cursive;
     color: var(--main-color);
+}
+
+.description-details span {
+    font-size: 1rem;
+}
+
+.description-details p {
+    color: var(--fourth-color);
+    font-weight: 600;
 }
 
 /*responsive*/
@@ -546,7 +557,7 @@ td {
 }
 
 @media screen and (max-width: 1024px) {
-    .search{
+    .search {
         width: 100%;
     }
 }
