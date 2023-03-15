@@ -1,12 +1,6 @@
-//this function will push all the events to an array.
-export const downloadEvents = (events, array) => {
-    events.forEach(event => {
-        array.push(event);
-    });
-}
-
 //this function will create a card for each event in the template.
 export const createCards = (events, container) => {
+    container.innerHTML = "";
     let fragment = document.createDocumentFragment();
     events.forEach(event => {
         let card = document.createElement("div");
@@ -67,6 +61,21 @@ export const createDetails = (item, container) => {
     container.appendChild(details);
 }
 
+//this function will filter the events by name.
+
+export function searchFilter(input, array, container) {
+    input.addEventListener("input", () => {
+        let filteredArray = array.filter(item => item.name.toLowerCase().includes(input.value.toLowerCase()));
+        createCards(filteredArray, container);
+    });
+}
+
+// export function categoryFilter(container) {
+//     container.addEventListener("change", () => {
+//         console.log("dddd");
+//     });
+// }
+
 
 //this function will filter the events by category.
 
@@ -85,23 +94,4 @@ export const createDetails = (item, container) => {
 // // categories.addEventListener("change", (e) => {
 //     let arrayFiltrado = categoryFilter(array, categories);
 //     createCards(arrayFiltrado, container);
-
-
-
-// //this function will filter the events by name.
-
-// export function searchFilter(input, array, container){
-//     input.addEventListener("keyup", (e) => {
-//         let arrayFiltrado = filterByName(array, e.target.value);
-//         createCards(arrayFiltrado, container);
-//     });
-// }
-
-// function filterByName(array, textoUsuario){
-//     let arrayAux = array.filter(item => item.name.toLowerCase().includes(textoUsuario.toLowerCase().trim()));
-//     if(arrayAux.length > 0){
-//         return arrayAux
-//     }
-//     return array;
-// }
 
