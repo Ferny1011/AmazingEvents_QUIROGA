@@ -1,5 +1,7 @@
 //this function will create a card for each event in the template.
 export const createCards = (events, container) => {
+    if(events.length == 0) 
+        return container.innerHTML = "<h1>No events found</h1>"
     container.innerHTML = "";
     let fragment = document.createDocumentFragment();
     events.forEach(event => {
@@ -41,7 +43,6 @@ export const generateCategories = (categories, container) => {
 }
 
 //this function will create details template.
-
 export const createDetails = (item, container) => {
     let details = document.createElement("div");
     details.classList.add("details-card");
@@ -62,7 +63,6 @@ export const createDetails = (item, container) => {
 }
 
 //this function will filter the events by name.
-
 export function searchFilter(input, array, container) {
     input.addEventListener("input", () => {
         let filteredArray = array.filter(item => item.name.toLowerCase().includes(input.value.toLowerCase()));
@@ -70,28 +70,19 @@ export function searchFilter(input, array, container) {
     });
 }
 
-// export function categoryFilter(container) {
-//     container.addEventListener("change", () => {
-//         console.log("dddd");
-//     });
-// }
-
-
 //this function will filter the events by category.
+export function categoryFilter(array, container, categoriesContainer) {
+    categoriesContainer.addEventListener("change", () => {
+        let categories = categoriesContainer.querySelectorAll(".form-check-input");
+        let categoriesArray = Array.from(categories);
+        let categoriesChecked = categoriesArray.filter(category => category.checked);
+        let categoriesValues = categoriesChecked.map(category => category.value);
+        let filteredArray = array.filter(item => categoriesValues.includes(item.category));
+        if(categoriesChecked.length > 0)
+            createCards(filteredArray, container);
+        else
+            createCards(array, container);
+    });
+}
 
-// export function categoryFilter(array, container){
-//     let categories = container.querySelectorAll(".form-check-input");
-//     let categoriesArray = Array.from(categories);
-//     let categoriesChecked = categoriesArray.filter(category => category.checked);
-//     let categoriesValues = categoriesChecked.map(category => category.value);//to lowwer
-//     if(categoriesChecked.length > 0){
-//         let arrayFiltrado = array.filter(item => categoriesValues.includes(item.value));//tolower
-//         return arrayFiltrado;
-//     }
-//     return array;
-// }
-
-// // categories.addEventListener("change", (e) => {
-//     let arrayFiltrado = categoryFilter(array, categories);
-//     createCards(arrayFiltrado, container);
 

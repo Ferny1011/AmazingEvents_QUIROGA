@@ -12,4 +12,4 @@ createCards(homeEvents, cards);
 let homeCategories = getCategories(homeEvents);
 generateCategories(homeCategories, categoriesContainer);
 searchFilter(searchBar, homeEvents, cards);
-// categoryFilter(categoriesContainer);
+categoryFilter(homeEvents, cards, categoriesContainer);
