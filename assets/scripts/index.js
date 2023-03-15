@@ -1,5 +1,5 @@
 import data from "./amazing.js";
-import { createCards, generateCategories, getCategories, searchFilter, categoryFilter } from "./functions.js";
+import { createCards, generateCategories, getCategories, filterByAll } from "./functions.js";
 
 
 let homeEvents = data.events;
@@ -11,5 +11,4 @@ const searchBar = document.getElementById("searchBar");
 createCards(homeEvents, cards);
 let homeCategories = getCategories(homeEvents);
 generateCategories(homeCategories, categoriesContainer);
-searchFilter(searchBar, homeEvents, cards);
-categoryFilter(homeEvents, cards, categoriesContainer);
+filterByAll(searchBar, homeEvents, cards, categoriesContainer);

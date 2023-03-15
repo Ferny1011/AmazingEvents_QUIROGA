@@ -1,6 +1,6 @@
 //this function will create a card for each event in the template.
 export const createCards = (events, container) => {
-    if(events.length == 0) 
+    if (events.length == 0)
         return container.innerHTML = "<h1>No events found</h1>"
     container.innerHTML = "";
     let fragment = document.createDocumentFragment();
@@ -42,6 +42,42 @@ export const generateCategories = (categories, container) => {
     container.appendChild(fragment);
 }
 
+//this function will filter the events by name.
+function filterByname(name, array) {
+    let filteredArray = array.filter(item => item.name.toLowerCase().includes(name.value.toLowerCase()));
+    return filteredArray;
+}
+
+//this function will filter the events by category.
+function filterByCategory(categoriesContainer, array) {
+    let categories = categoriesContainer.querySelectorAll(".form-check-input");
+    let categoriesArray = Array.from(categories);
+    let categoriesChecked = categoriesArray.filter(category => category.checked);
+    let categoriesValues = categoriesChecked.map(category => category.value);
+    let filteredArray = array.filter(item => categoriesValues.includes(item.category));
+    if (categoriesChecked.length > 0)
+        return filteredArray;
+    else
+        return array;
+}
+
+//this function will filter the events by name and category.
+function combinedFilter(searchBar, array, container, categoriesContainer) {
+    let filteredArrayByName = filterByname(searchBar, array);
+    let filteredArrayByCategory = filterByCategory(categoriesContainer, filteredArrayByName);
+    createCards(filteredArrayByCategory, container);
+}
+
+export function filterByAll(searchBar, array, container, categoriesContainer) {
+    categoriesContainer.addEventListener("change", () => {
+        combinedFilter(searchBar, array, container, categoriesContainer);
+    });
+
+    searchBar.addEventListener("input", () => {
+        combinedFilter(searchBar, array, container, categoriesContainer);
+    });
+}
+
 //this function will create details template.
 export const createDetails = (item, container) => {
     let details = document.createElement("div");
@@ -60,29 +96,6 @@ export const createDetails = (item, container) => {
             <p><span>Price:</span> $${item.price}</p>
         </div>`;
     container.appendChild(details);
-}
-
-//this function will filter the events by name.
-export function searchFilter(input, array, container) {
-    input.addEventListener("input", () => {
-        let filteredArray = array.filter(item => item.name.toLowerCase().includes(input.value.toLowerCase()));
-        createCards(filteredArray, container);
-    });
-}
-
-//this function will filter the events by category.
-export function categoryFilter(array, container, categoriesContainer) {
-    categoriesContainer.addEventListener("change", () => {
-        let categories = categoriesContainer.querySelectorAll(".form-check-input");
-        let categoriesArray = Array.from(categories);
-        let categoriesChecked = categoriesArray.filter(category => category.checked);
-        let categoriesValues = categoriesChecked.map(category => category.value);
-        let filteredArray = array.filter(item => categoriesValues.includes(item.category));
-        if(categoriesChecked.length > 0)
-            createCards(filteredArray, container);
-        else
-            createCards(array, container);
-    });
 }
 
 
