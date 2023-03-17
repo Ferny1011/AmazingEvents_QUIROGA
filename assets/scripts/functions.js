@@ -1,3 +1,12 @@
+//this function will download the data from the API
+export async function downloadData(){
+    let data;
+    await fetch ("/assets/data/amazing.json")
+        .then(response => response.json())
+        .then(json => data = json)
+    return data;
+}
+
 //this function will create a card for each event in the template.
 export const createCards = (events, container) => {
     if (events.length == 0)
@@ -97,5 +106,4 @@ export const createDetails = (item, container) => {
         </div>`;
     container.appendChild(details);
 }
-
 
