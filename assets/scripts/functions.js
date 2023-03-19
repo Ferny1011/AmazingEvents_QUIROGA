@@ -107,3 +107,93 @@ export const createDetails = (item, container) => {
     container.appendChild(details);
 }
 
+//this function will return the event with the highest of one property.
+function getHighest (events, property){
+    let highest = events.reduce((prev, current) => (prev[property] > current[property]) ? prev : current);
+    return highest;
+}
+
+//this function will get percentage of attendance.
+function getPercentageAttendance (events){
+    let eventsPercentage = events.map(event => (event.assistance / event.capacity) * 100);
+    return eventsPercentage;
+}
+
+//this function will return the event with the highest percentage of attendance.
+function getHighestAttendance (events){
+    let highestPercentage = Math.max(...getPercentageAttendance(events));
+    let highestAttendance = events.find(event => (event.assistance / event.capacity) * 100 == highestPercentage);
+    return highestAttendance;
+}
+
+//this function will return the event with the lowest percentage of attendance.
+function getLowestAttendance (events){
+    let lowestPercentage = Math.min(...getPercentageAttendance(events));
+    let lowestAttendance = events.find(event => (event.assistance / event.capacity) * 100 == lowestPercentage);
+    return lowestAttendance;
+}
+
+//this function will return the revenues.
+function getRevenues (events){
+    let revenues = events.reduce((acumm, current) => acumm + current.price, 0);
+    return revenues;
+}
+
+//this function will create stats template.
+export function createStatsTable (container, allEvents, pastEvents, upcomingEvents){
+    let table = document.createElement("tbody");
+    table.innerHTML = `
+    <tr>
+        <th colspan="3">Events statistics</th>
+    </tr>
+    <tr>
+        <td>
+            <p>Events with the highest percentage of attendance</p>
+        </td>
+        <td>
+            <p>Events with the lowest percentage of attendance</p>
+        </td>
+        <td>
+            <p>Event with larger capacity</p>
+        </td>
+    </tr>
+    <tr>
+        <td>${getHighestAttendance(pastEvents).name}</td>
+        <td>${getLowestAttendance(pastEvents).name}</td>
+        <td>${getHighest(allEvents, "capacity").name}</td>
+    </tr>
+    <tr>
+        <th colspan="3">Upcoming events statistics by category</th>
+    </tr>
+    <tr>
+        <td><p>Categories</p></td>
+        <td><p>Revenues</p></td>
+        <td><p>Percentage of attendance</p></td>
+    </tr>`;
+    getCategories(upcomingEvents).forEach(category => {
+        let row = document.createElement("tr");
+        row.innerHTML = `
+        <td>${category}</td>
+        <td>$${getRevenues(upcomingEvents.filter(event => event.category == category))}</td>
+        <td>${getPercentageAttendance(upcomingEvents.filter(event => event.category == category))}%</td>`;
+        table.appendChild(row);
+    });
+    table.innerHTML += `
+    <tr>
+        <th colspan="3">Past Events statistics by category</th>
+    </tr>
+    <tr>
+        <td><p>Categories</p></td>
+        <td><p>Revenues</p></td>
+        <td><p>Percentage of attendance</p></td>
+    </tr>`; 
+    getCategories(pastEvents).forEach(category => {
+        let row = document.createElement("tr");
+        row.innerHTML = `
+        <td>${category}</td>
+        <td>$${getRevenues(pastEvents.filter(event => event.category == category))}</td>
+        <td>${(getPercentageAttendance(pastEvents.filter(event => event.category == category)))}%</td>`;
+        table.appendChild(row);
+    });  
+    container.appendChild(table);
+}
