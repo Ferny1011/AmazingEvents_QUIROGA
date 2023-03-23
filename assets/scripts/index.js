@@ -1,7 +1,7 @@
-import data from "./amazing.js";
-import { createCards, generateCategories, getCategories, filterByAll } from "./functions.js";
+import { createCards, generateCategories, getCategories, filterByAll, downloadData } from "./functions.js";
 
 
+const data = await downloadData();
 let homeEvents = data.events;
 const cards = document.querySelector(".cards");
 const categoriesContainer = document.querySelector(".categories");

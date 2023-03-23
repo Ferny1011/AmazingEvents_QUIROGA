@@ -15,6 +15,8 @@ body {
     background-color: var(--fourth-color);
     font-family: 'Kanit', sans-serif;
     height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 /*navbar*/
@@ -256,6 +258,7 @@ li>a:hover {
 
 /*footer*/
 footer {
+    flex: 1;
     display: flex;
     justify-content: space-between;
     background-color: var(--secondary-color);
@@ -263,7 +266,6 @@ footer {
     filter: drop-shadow(0 0 10px var(--main-color));
     color: var(--fourth-color);
     font-size: 1.1rem;
-    height: 10vh;
 }
 
 .social {
@@ -300,11 +302,11 @@ footer {
 .left-form>h2 {
     position: absolute;
     z-index: 1;
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: 600;
     font-family: 'Courgette', cursive;
-    color: var(--fourth-color);
-    top: 470px;
+    color: var(--main-color);
+    top: 435px;
 }
 
 .left-form>p {
@@ -415,6 +417,7 @@ table {
     width: 80%;
     border-collapse: collapse;
     margin: 50px;
+    text-align: center;
 }
 
 th {
@@ -432,6 +435,12 @@ td {
     font-weight: 400;
     padding: 10px;
     border: var(--fourth-color) solid 1px;
+}
+
+.subTitle {
+    font-size: 1.5rem;
+    font-weight: 600;
+    font-family: 'Courgette', cursive;
 }
 
 /*Details Cards*/

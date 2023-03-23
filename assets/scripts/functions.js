@@ -1,7 +1,7 @@
 //this function will download the data from the API
-export async function downloadData(){
+export async function downloadData() {
     let data;
-    await fetch ("/assets/data/amazing.json")
+    await fetch("/assets/data/amazing.json")
         .then(response => response.json())
         .then(json => data = json)
     return data;
@@ -108,45 +108,70 @@ export const createDetails = (item, container) => {
 }
 
 //this function will return the event with the highest of one property.
-function getHighest (events, property){
+function getHighest(events, property) {
     let highest = events.reduce((prev, current) => (prev[property] > current[property]) ? prev : current);
     return highest;
 }
 
-//this function will get percentage of attendance.
-function getPercentageAttendance (events){
-    let eventsPercentage = events.map(event => (event.assistance / event.capacity) * 100);
+//this function will get percentage of attendance by category.
+function getPercentageByCategory(events) {
+    let attendance = 0;
+    let capacity = 0;
+    events.forEach(event => {
+        attendance += event.assistance ? event.assistance : event.estimate;
+        capacity += event.capacity;
+    });
+    return ((attendance / capacity) * 100).toFixed(2);
+}
+
+//this function will get percentage of attendance of all events.
+function getPercentageAttendance(events) {
+    let eventsPercentage = events.map(event => event.assistance ? (event.assistance / event.capacity) * 100 : (event.estimate / event.capacity) * 100);
     return eventsPercentage;
 }
 
 //this function will return the event with the highest percentage of attendance.
-function getHighestAttendance (events){
+function getHighestAttendance(events) {
     let highestPercentage = Math.max(...getPercentageAttendance(events));
-    let highestAttendance = events.find(event => (event.assistance / event.capacity) * 100 == highestPercentage);
+    let highestAttendance = events.find(event => event.assistance ? (event.assistance / event.capacity) * 100 == highestPercentage : (event.estimate / event.capacity) * 100 == highestPercentage);
     return highestAttendance;
 }
 
 //this function will return the event with the lowest percentage of attendance.
-function getLowestAttendance (events){
+function getLowestAttendance(events) {
     let lowestPercentage = Math.min(...getPercentageAttendance(events));
-    let lowestAttendance = events.find(event => (event.assistance / event.capacity) * 100 == lowestPercentage);
+    let lowestAttendance = events.find(event => event.assistance ? (event.assistance / event.capacity) * 100 == lowestPercentage : (event.estimate / event.capacity) * 100 == lowestPercentage);
     return lowestAttendance;
 }
 
 //this function will return the revenues.
-function getRevenues (events){
-    let revenues = events.reduce((acumm, current) => acumm + current.price, 0);
+function getRevenues(events) {
+    let revenues = events.reduce((acumm, current) => acumm + current.price * (current.assistance ? current.assistance : current.estimate), 0);
     return revenues;
 }
 
-//this function will create stats template.
-export function createStatsTable (container, allEvents, pastEvents, upcomingEvents){
+//this function will create stats in the table.
+function getStatsEvents(events, container) {
+    getCategories(events).forEach(category => {
+        let eventsByCategory = events.filter(event => event.category == category);
+        let row = document.createElement("tr");
+        row.innerHTML = `
+        <td>${category}</td>
+        <td>${getRevenues(eventsByCategory).toLocaleString('es', { style: 'currency', currency: 'USD' })}</td>
+        <td>${getPercentageByCategory(eventsByCategory)}%</td>`;
+        container.appendChild(row);
+    });
+
+}
+
+//this function will create the table in template.
+export function createStatsTable(container, allEvents, pastEvents, upcomingEvents) {
     let table = document.createElement("tbody");
     table.innerHTML = `
     <tr>
         <th colspan="3">Events statistics</th>
     </tr>
-    <tr>
+    <tr class="subTitle">
         <td>
             <p>Events with the highest percentage of attendance</p>
         </td>
@@ -158,42 +183,28 @@ export function createStatsTable (container, allEvents, pastEvents, upcomingEven
         </td>
     </tr>
     <tr>
-        <td>${getHighestAttendance(pastEvents).name}</td>
-        <td>${getLowestAttendance(pastEvents).name}</td>
+        <td>${getHighestAttendance(allEvents).name}</td>
+        <td>${getLowestAttendance(allEvents).name}</td>
         <td>${getHighest(allEvents, "capacity").name}</td>
     </tr>
     <tr>
         <th colspan="3">Upcoming events statistics by category</th>
     </tr>
-    <tr>
+    <tr class="subTitle">
         <td><p>Categories</p></td>
         <td><p>Revenues</p></td>
         <td><p>Percentage of attendance</p></td>
     </tr>`;
-    getCategories(upcomingEvents).forEach(category => {
-        let row = document.createElement("tr");
-        row.innerHTML = `
-        <td>${category}</td>
-        <td>$${getRevenues(upcomingEvents.filter(event => event.category == category))}</td>
-        <td>${getPercentageAttendance(upcomingEvents.filter(event => event.category == category))}%</td>`;
-        table.appendChild(row);
-    });
+    getStatsEvents(upcomingEvents, table);
     table.innerHTML += `
     <tr>
         <th colspan="3">Past Events statistics by category</th>
     </tr>
-    <tr>
+    <tr class="subTitle">
         <td><p>Categories</p></td>
         <td><p>Revenues</p></td>
         <td><p>Percentage of attendance</p></td>
-    </tr>`; 
-    getCategories(pastEvents).forEach(category => {
-        let row = document.createElement("tr");
-        row.innerHTML = `
-        <td>${category}</td>
-        <td>$${getRevenues(pastEvents.filter(event => event.category == category))}</td>
-        <td>${(getPercentageAttendance(pastEvents.filter(event => event.category == category)))}%</td>`;
-        table.appendChild(row);
-    });  
+    </tr>`;
+    getStatsEvents(pastEvents, table);
     container.appendChild(table);
 }

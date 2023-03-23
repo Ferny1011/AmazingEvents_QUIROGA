@@ -1,6 +1,7 @@
-import data from "./amazing.js";
-import { createStatsTable } from "./functions.js";
+import { createStatsTable, downloadData } from "./functions.js";
 
+
+const data = await downloadData();
 const statsContainer = document.getElementById("tableStats");
 const allEvents = data.events;
 const pastEvents = data.events.filter(event => event.date < data.currentDate);
