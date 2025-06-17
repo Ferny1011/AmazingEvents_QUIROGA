@@ -71,9 +71,9 @@ Today, people often search for events that match their interests. However, poorl
 
 ## 📸 Screenshots
 
-![Main View](src/assets/home.png)  
-![Event Detail Page](src/assets/detail.png)  
-![Statistics Page](src/assets/stats.png)
+![Main View](assets/img/home.png)  
+![Event Detail Page](assets/img/detail.png)  
+![Statistics Page](assets/img/stats.png)
 
 ---
 
